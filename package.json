@@ -1,0 +1,15 @@
+{
+  "name": "intellirecipe-frontend-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Frontend smoke and E2E tests for IntelliRecipe",
+  "scripts": {
+    "test:smoke:api": "node scripts/smoke-api.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:list": "playwright test --list"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

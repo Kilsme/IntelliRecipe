@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>IntelliRecipe 首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --danger: #dc2626;
+        --ok: #16a34a;
+        --menu-border: rgba(255, 255, 255, 0.28);
+        --btn-bg: rgba(255, 255, 255, 0.2);
+        --btn-bg-hover: rgba(255, 255, 255, 0.3);
+        --btn-border: rgba(255, 255, 255, 0.45);
+        --text: #ffffff;
+        --shadow: 0 14px 32px rgba(0, 0, 0, 0.24);
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", "PingFang SC", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+
+      body.theme-day {
+        background-image: url("app/public/厨房-日.jpg");
+      }
+
+      body.theme-night {
+        background-image: url("app/public/厨房-夜.jpg");
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.24);
+        pointer-events: none;
+      }
+
+      .shell {
+        position: relative;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .top-actions {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 2;
+      }
+
+      .btn {
+        border-radius: 10px;
+        border: 1px solid var(--btn-border);
+        background: var(--btn-bg);
+        color: #fff;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        backdrop-filter: blur(3px);
+        box-shadow: var(--shadow);
+      }
+
+      .btn:hover {
+        background: var(--btn-bg-hover);
+      }
+
+      .center-actions {
+        min-height: calc(90vh - 40px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2vw;
+        flex-wrap: nowrap;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        padding: 0 5vw;
+        margin-top: 10vh;
+      }
+
+      .center-actions > img {
+        flex: 1;
+        height: 40vh;
+        min-height: 200px;
+        object-fit: contain;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      #goFridgeBtn {
+        flex: 1;
+        height: 50vh;
+        min-height: 250px;
+      }
+
+      .center-actions > img:hover {
+        transform: scale(1.05);
+      }
+
+      .more-wrap {
+        position: relative;
+      }
+
+      .more-menu {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: rgba(15, 23, 42, 0.78);
+        border: 1px solid var(--menu-border);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        min-width: 150px;
+        padding: 6px;
+        z-index: 3;
+        backdrop-filter: blur(4px);
+      }
+
+      .more-menu button {
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        border-radius: 8px;
+        padding: 8px 10px;
+        cursor: pointer;
+        color: #f8fafc;
+        font-size: 14px;
+      }
+
+      .more-menu button:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .more-menu .danger {
+        color: #fecaca;
+      }
+
+      .status {
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+        min-height: 20px;
+        font-size: 14px;
+        color: #e2e8f0;
+        z-index: 1;
+      }
+
+      .status.error {
+        color: #fecaca;
+      }
+
+      .status.ok {
+        color: #bbf7d0;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="theme-day">
+    <main class="shell">
+      <section class="top-actions">
+        <button id="themeToggleBtn" class="btn" type="button">切换夜景</button>
+        <div class="more-wrap">
+          <button id="moreBtn" class="btn" type="button">更多</button>
+          <div id="moreMenu" class="more-menu hidden">
+            <button id="profileBtn" type="button">个人中心</button>
+            <button id="logoutBtn" class="danger" type="button">退出登录</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="center-actions">
+        <img id="goFridgeBtn" src="app/public/冰箱.png" alt="去往冰箱" title="去往冰箱" />
+        <img id="goRecipeBtn" src="app/public/菜谱.png" alt="去往菜谱" title="去往菜谱" />
+        <img id="goCartBtn" src="app/public/购物车.png" alt="去往购物车" title="去往购物车" />
+      </section>
+
+      <div id="status" class="status"></div>
+    </main>
+
+    <script type="module" src="app/pages/home.js?v=20260325-2"></script>
+  </body>
+</html>

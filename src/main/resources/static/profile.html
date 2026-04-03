@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息 - IntelliRecipe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #ff8345;
+            --bg: #f5f6fb;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --ok: #16a34a;
+            --err: #dc2626;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", "PingFang SC", sans-serif;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: linear-gradient(135deg, #ff8345, #ffb347);
+            color: #fff;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-dark {
+            background: #1f2937;
+            color: #fff;
+        }
+        .btn-light {
+            background: #fff;
+            color: #1f2937;
+        }
+        main {
+            max-width: 900px;
+            margin: 24px auto;
+            padding: 0 16px 24px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+        .field input[readonly] {
+            background: #f8fafc;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+        .field textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+        .row-wide {
+            grid-column: 1 / -1;
+        }
+        .tip {
+            margin-top: 8px;
+            font-size: 0.86rem;
+            color: #64748b;
+        }
+        .msg {
+            margin-top: 12px;
+            font-size: 0.92rem;
+            min-height: 20px;
+        }
+        .msg.ok { color: var(--ok); }
+        .msg.err { color: var(--err); }
+    </style>
+</head>
+<body>
+<header>
+    <h1>个人信息设置</h1>
+    <div class="actions">
+        <button id="backBtn" class="btn btn-light" type="button">返回首页</button>
+        <button id="saveBtn" class="btn btn-dark" type="button">保存修改</button>
+    </div>
+</header>
+<main>
+    <section class="card">
+        <div class="grid">
+            <div class="field">
+                <label for="username">用户名（仅展示）</label>
+                <input id="username" type="text" readonly>
+            </div>
+            <div class="field">
+                <label for="phone">手机号（仅展示）</label>
+                <input id="phone" type="text" readonly>
+            </div>
+            <div class="field">
+                <label for="gender">性别</label>
+                <select id="gender">
+                    <option value="">请选择</option>
+                    <option value="0">女生</option>
+                    <option value="1">男生</option>
+                </select>
+                <div class="tip">数据库规则：0 = 女生，1 = 男生</div>
+            </div>
+            <div class="field">
+                <label for="age">年龄</label>
+                <input id="age" type="number" min="0" max="130">
+            </div>
+            <div class="field">
+                <label for="heightCm">身高(cm)</label>
+                <input id="heightCm" type="number" min="0" max="260">
+            </div>
+            <div class="field">
+                <label for="weightKg">体重(kg)</label>
+                <input id="weightKg" type="number" min="0" max="500" step="0.1">
+            </div>
+            <div class="field">
+                <label for="region">地区</label>
+                <input id="region" type="text" placeholder="如：湖南">
+            </div>
+            <div class="field">
+                <label for="dietType">饮食类型</label>
+                <select id="dietType">
+                    <option value="NORMAL">NORMAL</option>
+                    <option value="LOSE_WEIGHT">LOSE_WEIGHT</option>
+                    <option value="MUSCLE_GAIN">MUSCLE_GAIN</option>
+                    <option value="VEGAN">VEGAN</option>
+                </select>
+            </div>
+            <div class="field row-wide">
+                <label for="preferences">偏好（JSON文本）</label>
+                <textarea id="preferences" placeholder='如：{"preferred_cuisines":["湘菜"]}'></textarea>
+            </div>
+            <div class="field row-wide">
+                <label for="allergies">过敏原（JSON文本）</label>
+                <textarea id="allergies" placeholder='如：["花生","海鲜"]'></textarea>
+            </div>
+        </div>
+        <div id="msg" class="msg"></div>
+    </section>
+</main>
+<script type="module" src="app/pages/profile.js"></script>
+</body>
+</html>
+
+
+

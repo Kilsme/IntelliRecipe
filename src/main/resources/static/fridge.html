@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>冰箱管理 - IntelliRecipe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #ff8345;
+            --bg: #f5f6fb;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --ok: #16a34a;
+            --err: #dc2626;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", "PingFang SC", sans-serif;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: linear-gradient(135deg, #ff8345, #ffb347);
+            color: #fff;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        .sub {
+            font-size: 0.92rem;
+            opacity: 0.95;
+            margin-top: 4px;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 13px;
+            font-size: 0.94rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-light {
+            background: #fff;
+            color: #1f2937;
+        }
+        .btn-dark {
+            background: #1f2937;
+            color: #fff;
+        }
+        main {
+            max-width: 1200px;
+            margin: 18px auto 28px;
+            padding: 0 14px;
+            display: grid;
+            gap: 14px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+        }
+        .status {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+        .status.success {
+            color: var(--ok);
+        }
+        .status.error {
+            color: var(--err);
+        }
+        .hidden {
+            display: none !important;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+        .category-tab {
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 7px 11px;
+            background: #f8fafc;
+            color: #334155;
+            cursor: pointer;
+            font-size: 0.88rem;
+        }
+        .category-tab.active {
+            border-color: var(--primary);
+            background: #fff2ea;
+            color: #c2410c;
+        }
+        .inline-fields {
+            display: grid;
+            gap: 8px;
+            grid-template-columns: 1.2fr 0.8fr 0.6fr auto;
+            align-items: center;
+        }
+        @media (max-width: 820px) {
+            .inline-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+        select,
+        input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.92rem;
+            min-height: 38px;
+            background: #fff;
+        }
+        .panel-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .fridge-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .fridge-item {
+            background: #fffaf6;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 9px;
+        }
+        .fridge-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .fridge-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .fridge-quantity,
+        .nutrition-tags {
+            margin-top: 6px;
+            font-size: 0.86rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+        .fridge-actions {
+            position: relative;
+        }
+        .fridge-more {
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1;
+            padding: 4px 8px;
+        }
+        .fridge-menu {
+            position: absolute;
+            right: 0;
+            top: 28px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            z-index: 3;
+            padding: 4px;
+        }
+        .fridge-menu button {
+            border: none;
+            background: #fff;
+            color: #dc2626;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+        .category-section {
+            margin-top: 10px;
+        }
+        .category-title {
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <h1>冰箱管理</h1>
+        <div class="sub">用户：<span id="username">加载中...</span></div>
+    </div>
+    <button id="backHomeBtn" class="btn btn-light" type="button">回到首页</button>
+</header>
+
+<main>
+    <section class="card">
+        <h2>食材库存</h2>
+        <div id="status" class="status"></div>
+
+        <div id="categoryTabs" class="tabs"></div>
+        <div class="inline-fields">
+            <select id="ingredientSelect"></select>
+            <input id="quantityInput" type="number" min="0" step="0.1" placeholder="数量">
+            <input id="unitInput" type="text" value="g" placeholder="单位">
+            <button id="addFoodBtn" class="btn btn-dark" type="button">加入冰箱</button>
+        </div>
+        <div id="addMsg" class="status"></div>
+
+        <div class="panel-actions">
+            <button id="viewFridgeBtn" class="btn btn-light" type="button">刷新库存</button>
+        </div>
+
+        <div id="fridgeContainer" class="hidden">
+            <div id="fridgeList"></div>
+        </div>
+    </section>
+</main>
+
+<script type="module" src="app/pages/fridge.js"></script>
+</body>
+</html>

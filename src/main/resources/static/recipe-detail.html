@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>菜谱详情 - IntelliRecipe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #ff7a3d;
+            --bg: #f4f6fb;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --ok: #16a34a;
+            --err: #dc2626;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", "PingFang SC", sans-serif;
+        }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: linear-gradient(135deg, #ff7a3d, #ffad68);
+            color: #fff;
+            padding: 18px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.45rem;
+        }
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-light {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff7a3d, #ea580c);
+            color: #fff;
+        }
+        .btn-secondary {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #334155;
+        }
+        main {
+            max-width: 940px;
+            margin: 18px auto;
+            padding: 0 14px 24px;
+            display: grid;
+            gap: 12px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+        }
+        .ingredients {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 9px;
+        }
+        .ingredient {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .recipe-image {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+            display: block;
+            margin: 10px 0;
+        }
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .msg {
+            margin-top: 10px;
+            min-height: 20px;
+            font-size: 0.92rem;
+        }
+        .ok { color: var(--ok); }
+        .err { color: var(--err); }
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            z-index: 20;
+        }
+        .modal {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .modal h3 {
+            margin-top: 0;
+        }
+        .modal ul {
+            margin: 8px 0 0;
+            padding-left: 18px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>菜谱详情</h1>
+    <div class="header-actions">
+        <button id="backBtn" class="btn btn-light" type="button">返回智能菜谱</button>
+        <button id="backHomeBtn" class="btn btn-light" type="button">返回首页</button>
+    </div>
+</header>
+
+<main>
+    <section class="card">
+        <h2 id="title">加载中...</h2>
+        <p id="desc"></p>
+        <img id="recipeImage" class="recipe-image" src="/recipe-images/default-dish.svg" alt="菜谱图片">
+        <div class="actions">
+            <a id="douyin" class="btn btn-primary" target="_blank" rel="noopener">抖音搜索教程</a>
+            <button id="useBtn" class="btn btn-primary" type="button">去使用（检查并扣减库存）</button>
+            <button id="backPrevBtn" class="btn btn-secondary" type="button">返回上一步</button>
+            <button id="backInlineBtn" class="btn btn-secondary" type="button">回到菜谱页</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h3>食材清单</h3>
+        <div id="ingredients" class="ingredients"></div>
+    </section>
+
+    <section class="card">
+        <h3>烹饪步骤</h3>
+        <ol id="steps"></ol>
+    </section>
+
+    <section class="card">
+        <h3>使用后评价</h3>
+        <label for="rating">评分</label>
+        <select id="rating">
+            <option value="5">5 分</option>
+            <option value="4">4 分</option>
+            <option value="3">3 分</option>
+            <option value="2">2 分</option>
+            <option value="1">1 分</option>
+        </select>
+        <label for="review" style="margin-top:8px;display:block;">评价内容</label>
+        <textarea id="review" rows="4" placeholder="比如：步骤清晰，适合晚餐"></textarea>
+        <button id="submitBtn" class="btn btn-primary" style="margin-top:10px;" type="button">提交评价</button>
+        <div id="msg" class="msg"></div>
+    </section>
+</main>
+
+<div id="missingModalMask" class="modal-mask">
+    <div class="modal">
+        <h3>当前食材不足</h3>
+        <div id="missingText" style="color:#475569;"></div>
+        <ul id="missingList"></ul>
+        <div class="actions">
+            <button id="addMissingBtn" class="btn btn-primary" type="button">添加缺料到购物车</button>
+            <button id="goCartBtn" class="btn btn-secondary" type="button">去购物车</button>
+            <button id="retryUseBtn" class="btn btn-secondary" type="button">购物后重试使用</button>
+            <button id="closeMissingBtn" class="btn btn-secondary" type="button">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="app/pages/recipe-detail.js"></script>
+</body>
+</html>

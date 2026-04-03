@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>智能菜谱 - IntelliRecipe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #ff7a3d;
+            --bg: #f4f6fb;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --ok: #16a34a;
+            --err: #dc2626;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", "PingFang SC", sans-serif;
+        }
+        header {
+            background: linear-gradient(135deg, #ff7a3d, #ffad68);
+            color: #fff;
+            padding: 18px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-light {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        main {
+            max-width: 1060px;
+            margin: 20px auto;
+            padding: 0 14px 24px;
+            display: grid;
+            gap: 12px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e8edf6;
+            padding: 14px;
+            box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+        }
+        .card h2,
+        .card h3 {
+            margin-top: 0;
+        }
+        .time-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .time-btn {
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #334155;
+            border-radius: 999px;
+            padding: 7px 11px;
+            cursor: pointer;
+        }
+        .time-btn.active {
+            border-color: var(--primary);
+            background: #ffefe7;
+            color: #9a3412;
+        }
+        .primary-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: #fff;
+            background: linear-gradient(135deg, #ff7a3d, #ea580c);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .secondary-btn {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 14px;
+            background: #fff;
+            color: #334155;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            min-height: 70px;
+        }
+        .muted {
+            color: var(--muted);
+        }
+        .msg {
+            margin-top: 8px;
+            min-height: 20px;
+            font-size: 0.92rem;
+        }
+        .ok { color: var(--ok); }
+        .err { color: var(--err); }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .tag {
+            background: #fff7ed;
+            border: 1px solid #fdba74;
+            color: #9a3412;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.82rem;
+        }
+        .ingredients {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        .ingredient-item {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 9px;
+        }
+        .steps li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .recipe-image-wrap {
+            margin: 12px 0;
+        }
+        .recipe-image {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+            display: block;
+        }
+        .note-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            color: #334155;
+            line-height: 1.6;
+            display: none;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .link-btn {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 9px 13px;
+            background: #1f2937;
+            color: #fff;
+        }
+        #jumpToDetailBtn.hidden {
+            display: none;
+        }
+        .collection-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
+            background: #f8fafc;
+        }
+        .collection-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .collection-time {
+            color: #64748b;
+            font-size: 0.86rem;
+            margin-top: 4px;
+        }
+        .collection-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .small-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .small-btn.danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            z-index: 20;
+        }
+        .modal {
+            width: 100%;
+            max-width: 520px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .modal h3 {
+            margin-top: 0;
+        }
+        .modal ul {
+            margin: 8px 0 0;
+            padding-left: 18px;
+        }
+        .modal-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>智能生成菜谱</h1>
+    <button id="backBtn" class="btn btn-light" type="button">回到首页</button>
+</header>
+
+<main>
+    <section class="card">
+        <h2>推荐条件</h2>
+        <div class="muted">系统会综合你的个人信息、当前时段、收藏/浏览/做过历史进行推荐。</div>
+        <div id="timeTabs" class="time-tabs">
+            <button class="time-btn active" data-time="早餐" type="button">早餐</button>
+            <button class="time-btn" data-time="午餐" type="button">午餐</button>
+            <button class="time-btn" data-time="晚餐" type="button">晚餐</button>
+            <button class="time-btn" data-time="夜宵" type="button">夜宵</button>
+        </div>
+        <textarea id="demandInput" placeholder="可选：比如‘想吃清淡一点、30分钟内完成’"></textarea>
+        <div class="actions">
+            <button id="generateBtn" class="primary-btn" type="button">生成推荐菜谱</button>
+            <button id="jumpToDetailBtn" class="secondary-btn hidden" type="button">跳转到详情页</button>
+        </div>
+        <div id="msg" class="msg"></div>
+    </section>
+
+    <section id="resultCard" class="card" style="display:none;">
+        <h2 id="recipeTitle">-</h2>
+        <p id="recipeDesc" class="muted"></p>
+        <div class="recipe-image-wrap">
+            <img id="recipeImage" class="recipe-image" src="/recipe-images/default-dish.svg" alt="菜谱图片">
+        </div>
+
+        <div id="flavorTags" class="tags"></div>
+        <div id="replaceInfo" class="note-box"></div>
+        <div id="missingInfo" class="note-box"></div>
+
+        <h3>所需食材（严格来自字典库）</h3>
+        <div id="ingredients" class="ingredients"></div>
+
+        <h3>步骤</h3>
+        <ol id="steps" class="steps"></ol>
+
+        <div class="actions">
+            <a id="douyinLink" class="link-btn" target="_blank" rel="noopener">抖音搜索教程</a>
+            <button id="collectBtn" class="primary-btn" type="button">收藏</button>
+            <button id="useBtn" class="primary-btn" type="button">去使用（加购物车）</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h3>我的收藏</h3>
+        <div class="actions">
+            <button id="viewCollectionsBtn" class="secondary-btn" type="button">刷新收藏列表</button>
+            <button id="batchDeleteBtn" class="secondary-btn" type="button">批量删除已勾选</button>
+        </div>
+        <div id="collectionList"></div>
+    </section>
+</main>
+
+<div id="missingModalMask" class="modal-mask">
+    <div class="modal">
+        <h3>当前食材不足</h3>
+        <div id="missingModalText" class="muted"></div>
+        <ul id="missingModalList"></ul>
+        <div class="modal-actions">
+            <button id="addMissingBtn" class="primary-btn" type="button">添加缺料到购物车</button>
+            <button id="goCartBtn" class="secondary-btn" type="button">去购物车</button>
+            <button id="retryUseBtn" class="secondary-btn" type="button">购物后重试使用</button>
+            <button id="modalJumpDetailBtn" class="secondary-btn" type="button">查看详情</button>
+            <button id="closeModalBtn" class="secondary-btn" type="button">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="app/pages/recipe.js"></script>
+</body>
+</html>

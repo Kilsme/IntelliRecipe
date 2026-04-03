@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>IntelliRecipe 登录 / 注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary: #ff8345;
+            --secondary: #4a4a68;
+            --bg: #f5f6fb;
+            --card-bg: #ffffff;
+            --border: #e0e6f3;
+            --success: #1fbb60;
+            --error: #e05656;
+            --muted: #64748b;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", "PingFang SC", sans-serif;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe2d1, #f9f9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+        .auth-wrapper {
+            width: 100%;
+            max-width: 920px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            align-items: stretch;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 28px 24px;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(31, 45, 61, 0.12);
+            border: 1px solid var(--border);
+        }
+        .hero {
+            background:
+                linear-gradient(160deg, rgba(255, 131, 69, 0.95), rgba(255, 173, 90, 0.95)),
+                url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80")
+                center/cover;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+        }
+        .hero p {
+            margin: 0;
+            line-height: 1.7;
+            opacity: 0.92;
+        }
+        .panel h2 {
+            margin: 0 0 16px;
+            color: var(--secondary);
+        }
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .mode-btn {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #334155;
+            padding: 9px 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .mode-btn.active {
+            background: rgba(255, 131, 69, 0.12);
+            border-color: rgba(255, 131, 69, 0.45);
+            color: #c2410c;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+        input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 11px 12px;
+            font-size: 1rem;
+            margin-bottom: 14px;
+        }
+        #submitBtn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #fff;
+            padding: 11px 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #submitBtn:hover {
+            box-shadow: 0 10px 22px rgba(255, 131, 69, 0.28);
+        }
+        #formMsg {
+            min-height: 22px;
+            font-size: 0.92rem;
+            margin-bottom: 10px;
+        }
+        #formMsg.success {
+            color: var(--success);
+        }
+        #formMsg.error {
+            color: var(--error);
+        }
+        .register-only.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-wrapper">
+    <section class="card hero">
+        <h1>IntelliRecipe 智能菜谱管家</h1>
+        <p>登录后即可同步你的个性化口味、冰箱库存与购物清单。注册只需几秒钟，马上开启智能饮食体验。</p>
+    </section>
+    <section class="card panel">
+        <h2>账号登录 / 注册</h2>
+        <div class="mode-switch">
+            <button class="mode-btn active" data-mode="login" type="button">登录</button>
+            <button class="mode-btn" data-mode="register" type="button">注册</button>
+        </div>
+        <div id="formMsg"></div>
+        <form id="authForm">
+            <label for="username">用户名</label>
+            <input id="username" name="username" placeholder="请输入用户名" autocomplete="username" required>
+
+            <div class="register-only hidden">
+                <label for="phone">手机号（选填）</label>
+                <input id="phone" name="phone" placeholder="请输入手机号">
+            </div>
+
+            <label for="password">密码</label>
+            <input id="password" name="password" type="password" placeholder="请输入密码" autocomplete="current-password" required>
+
+            <button id="submitBtn" type="submit">登录</button>
+        </form>
+    </section>
+</div>
+<script type="module" src="app/pages/login.js"></script>
+</body>
+</html>
