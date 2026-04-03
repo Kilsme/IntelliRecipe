@@ -1,4 +1,5 @@
 # IntelliRecipe 后端技术与架构说明
+<img width="2510" height="1250" alt="屏幕截图 2026-03-27 161834" src="https://github.com/user-attachments/assets/dc31678d-6af7-451f-9886-0875796b19a2" />
 
 ## 1. 后端使用的主要技术
 
